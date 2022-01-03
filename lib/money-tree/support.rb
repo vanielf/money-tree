@@ -49,6 +49,13 @@ module MoneyTree
       encode_base58 address
     end
 
+    def to_serialized_bech32(human_readable_part, hex)
+      segwit_addr = Bech32::SegwitAddr.new
+      segwit_addr.hrp = human_readable_part
+      segwit_addr.script_pubkey = "0000" + hex
+      segwit_addr.addr
+    end
+
     def from_serialized_base58(base58)
       hex = decode_base58 base58
       checksum = hex.slice!(-8..-1)
