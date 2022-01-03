@@ -53,6 +53,16 @@ describe MoneyTree::PublicKey do
         expect(@key.to_address).to eql('13uVqa35BMo4mYq9LiZrXVzoz9EFZ6aoXe')
       end
     end
+    
+    describe "to_p2wpkh_p2sh" do
+      it "has 34 characters" do
+        expect(@key.to_p2wpkh_p2sh.length).to eql(34)
+      end
+    
+      it "is a valid p2wpkh_p2sh bitcoin address" do
+        expect(@key.to_p2wpkh_p2sh).to eql('31vNN7WVDxjvc5XZVKW3qV4B3nFLxsRPnE')
+      end
+    end
   end
 
   describe "without a private key" do
@@ -103,6 +113,16 @@ describe MoneyTree::PublicKey do
 
       it "is a valid compressed bitcoin address" do
         expect(@key.compressed.to_address).to eql('13uVqa35BMo4mYq9LiZrXVzoz9EFZ6aoXe')
+      end
+    end
+    
+    describe "to_p2wpkh_p2sh" do
+      it "has 34 characters" do
+        expect(@key.to_p2wpkh_p2sh.length).to eql(34)
+      end
+    
+      it "is a valid p2wpkh_p2sh bitcoin address" do
+        expect(@key.to_p2wpkh_p2sh).to eql('3JUBTtepUbTZgUtjbde7UANs5cey8N57xa')
       end
     end
 
