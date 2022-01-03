@@ -5,6 +5,7 @@ require "openssl"
 module MoneyTree
   module Support
     include OpenSSL
+    extend self
 
     INT32_MAX = 256 ** [1].pack("L*").size
     INT64_MAX = 256 ** [1].pack("Q*").size

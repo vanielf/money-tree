@@ -15,7 +15,7 @@ module MoneyTree
 
     def to_bech32(network: :bitcoin)
       hrp = NETWORKS[network][:human_readable_part]
-      witprog = to_ripemd160
+      witprog = @public_key.to_ripemd160
       Support.to_serialized_bech32(hrp, witprog)
     end
 

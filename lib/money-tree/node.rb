@@ -31,11 +31,6 @@ module MoneyTree
       }.merge(parse_out_key(hex)))
     end
 
-    def self.from_serialized_address(address)
-      puts "Node.from_serialized_address is DEPRECATED. Please use .from_bip32 instead."
-      from_bip32(address)
-    end
-
     def self.parse_out_key(hex)
       if hex.slice(0..1) == "00"
         private_key = MoneyTree::PrivateKey.new(key: hex.slice(2..-1))
@@ -129,11 +124,6 @@ module MoneyTree
     def to_bip32(type = :public, network: :bitcoin)
       raise PrivatePublicMismatch if type.to_sym == :private && private_key.nil?
       to_serialized_base58 to_serialized_hex(type, network: network)
-    end
-
-    def to_serialized_address(type = :public, network: :bitcoin)
-      puts "Node.to_serialized_address is DEPRECATED. Please use .to_bip32."
-      to_bip32(type, network: network)
     end
 
     def to_identifier(compressed = true)

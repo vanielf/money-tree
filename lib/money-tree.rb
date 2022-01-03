@@ -8,5 +8,4 @@ require "money-tree/version"
 
 require "openssl_extensions"
 
-module MoneyTree
-end
+module MoneyTree; end
