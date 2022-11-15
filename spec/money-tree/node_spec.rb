@@ -121,6 +121,104 @@ describe MoneyTree::Master do
           end
         end
 
+        describe "m/2147483648" do
+          before do
+            @node = @master.node_for_path "m/2147483648"
+          end
+
+          it "has an index of 2147483648" do
+            expect(@node.index).to eql(2147483648)
+          end
+
+          it "is private" do
+            expect(@node.is_private?).to eql(true)
+          end
+
+          it "has a depth of 1" do
+            expect(@node.depth).to eql(1)
+          end
+
+          it "generates subnode" do
+            expect(@node.to_identifier).to eql("5c1bd648ed23aa5fd50ba52b2457c11e9e80a6a7")
+            expect(@node.to_fingerprint).to eql("5c1bd648")
+            expect(@node.to_address).to eql("19Q2WoS5hSS6T8GjhK8KZLMgmWaq4neXrh")
+            expect(@node.to_p2wpkh_p2sh).to eql("3AbBmNbPDSzeZKHywDrH3h5v2rL8xGfT7e")
+            expect(@node.to_bech32_address).to eql("bc1qtsdavj8dyw49l4gt554jg47pr60gpf48ww2ens")
+          end
+
+          it "generates a private key" do
+            expect(@node.private_key.to_hex).to eql("edb2e14f9ee77d26dd93b4ecede8d16ed408ce149b6cd80b0715a2d911a0afea")
+            expect(@node.private_key.to_wif).to eql("L5BmPijJjrKbiUfG4zbiFKNqkvuJ8usooJmzuD7Z8dkRoTThYnAT")
+          end
+
+          it "generates a public key" do
+            expect(@node.public_key.to_hex).to eql("035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
+          end
+
+          it "generates a chain code" do
+            expect(@node.chain_code_hex).to eql("47fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae6236141")
+          end
+
+          it "generates a serialized private key" do
+            expect(@node.to_serialized_hex(:private)).to eql("0488ade4013442193e8000000047fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae623614100edb2e14f9ee77d26dd93b4ecede8d16ed408ce149b6cd80b0715a2d911a0afea")
+            expect(@node.to_bip32(:private)).to eql("xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7")
+          end
+
+          it "generates a serialized public_key" do
+            expect(@node.to_serialized_hex).to eql("0488b21e013442193e8000000047fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae6236141035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
+            expect(@node.to_bip32).to eql("xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw")
+          end
+        end
+
+        describe "m/-0" do
+          before do
+            @node = @master.node_for_path "m/-0"
+          end
+
+          it "has an index of 2147483648" do
+            expect(@node.index).to eql(2147483648)
+          end
+
+          it "is private" do
+            expect(@node.is_private?).to eql(true)
+          end
+
+          it "has a depth of 1" do
+            expect(@node.depth).to eql(1)
+          end
+
+          it "generates subnode" do
+            expect(@node.to_identifier).to eql("5c1bd648ed23aa5fd50ba52b2457c11e9e80a6a7")
+            expect(@node.to_fingerprint).to eql("5c1bd648")
+            expect(@node.to_address).to eql("19Q2WoS5hSS6T8GjhK8KZLMgmWaq4neXrh")
+            expect(@node.to_p2wpkh_p2sh).to eql("3AbBmNbPDSzeZKHywDrH3h5v2rL8xGfT7e")
+            expect(@node.to_bech32_address).to eql("bc1qtsdavj8dyw49l4gt554jg47pr60gpf48ww2ens")
+          end
+
+          it "generates a private key" do
+            expect(@node.private_key.to_hex).to eql("edb2e14f9ee77d26dd93b4ecede8d16ed408ce149b6cd80b0715a2d911a0afea")
+            expect(@node.private_key.to_wif).to eql("L5BmPijJjrKbiUfG4zbiFKNqkvuJ8usooJmzuD7Z8dkRoTThYnAT")
+          end
+
+          it "generates a public key" do
+            expect(@node.public_key.to_hex).to eql("035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
+          end
+
+          it "generates a chain code" do
+            expect(@node.chain_code_hex).to eql("47fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae6236141")
+          end
+
+          it "generates a serialized private key" do
+            expect(@node.to_serialized_hex(:private)).to eql("0488ade4013442193e8000000047fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae623614100edb2e14f9ee77d26dd93b4ecede8d16ed408ce149b6cd80b0715a2d911a0afea")
+            expect(@node.to_bip32(:private)).to eql("xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7")
+          end
+
+          it "generates a serialized public_key" do
+            expect(@node.to_serialized_hex).to eql("0488b21e013442193e8000000047fdacbd0f1097043b78c63c20c34ef4ed9a111d980047ad16282c7ae6236141035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
+            expect(@node.to_bip32).to eql("xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw")
+          end
+        end
+
         describe "m/0p" do
           before do
             @node = @master.node_for_path "m/0p"

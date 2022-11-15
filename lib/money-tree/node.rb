@@ -11,6 +11,8 @@ module MoneyTree
     attr_reader :index
     attr_reader :parent
 
+    PRIVATE_RANGE_LIMIT = 0x80000000
+
     class PublicDerivationFailure < StandardError; end
     class InvalidKeyForIndex < StandardError; end
     class ImportError < StandardError; end
@@ -46,7 +48,7 @@ module MoneyTree
     end
 
     def is_private?
-      index >= 0x80000000 || index < 0
+      index >= PRIVATE_RANGE_LIMIT || index < 0
     end
 
     def index_hex(i = index)
@@ -74,7 +76,7 @@ module MoneyTree
     end
 
     def derive_private_key(i = 0)
-      message = i >= 0x80000000 || i < 0 ? private_derivation_message(i) : public_derivation_message(i)
+      message = i >= PRIVATE_RANGE_LIMIT || i < 0 ? private_derivation_message(i) : public_derivation_message(i)
       hash = hmac_sha512 hex_to_bytes(chain_code_hex), message
       left_int = left_from_hash(hash)
       raise InvalidKeyForIndex, "greater than or equal to order" if left_int >= MoneyTree::Key::ORDER # very low probability
@@ -85,7 +87,7 @@ module MoneyTree
     end
 
     def derive_public_key(i = 0)
-      raise PrivatePublicMismatch if i >= 0x80000000
+      raise PrivatePublicMismatch if i >= PRIVATE_RANGE_LIMIT
       message = public_derivation_message(i)
       hash = hmac_sha512 hex_to_bytes(chain_code_hex), message
       left_int = left_from_hash(hash)
@@ -210,17 +212,19 @@ module MoneyTree
       end
     end
 
-    def parse_index(path_part)
-      is_prime = %w(p ').include? path_part[-1]
-      i = path_part.to_i
+    def negative?(path_part)
+      relative_index = path_part.to_i
+      prime_symbol_present = %w(p ').include?(path_part[-1])
+      minus_present = path_part[0] == "-"
+      private_range = relative_index >= PRIVATE_RANGE_LIMIT
+      negative_value = relative_index < 0
+      prime_symbol_present || minus_present || private_range || negative_value
+    end
 
-      i = if i < 0
-          i
-        elsif is_prime
-          i | 0x80000000
-        else
-          i & 0x7fffffff
-        end
+    def parse_index(path_part)
+      index = path_part.to_i
+      return index | PRIVATE_RANGE_LIMIT if negative?(path_part)
+      index
     end
 
     def strip_private_info!
